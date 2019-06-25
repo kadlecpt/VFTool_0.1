@@ -29,4 +29,4 @@ difAbs = abs(difC);
 stats.rmse = sqrt(1/nSamples*sum(difAbs.^2));
 stats.mae = 1/nSamples*sum(difAbs);
 stats.maxAbs = max(difAbs);
-
+end

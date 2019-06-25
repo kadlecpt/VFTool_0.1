@@ -1,4 +1,16 @@
 function updatePlot(fig)
+%% updatePlot update function plots 
+% This function updates the axes containg curves of refernce function and 
+% VF function.
+%
+%  INPUTS
+%   fig: GUI figure, figure [1 x 1]
+%
+%  SYNTAX
+%   updatePlot(fig)
+%
+% © 2019, Petr Kadlec, BUT, kadlecp@feec.vutbr.cz
+
 h = getappdata(fig, 'handles');
 data = getappdata(fig, 'values');
 switch h.bgPlotSpec.SelectedObject.String
@@ -39,7 +51,6 @@ h.axes.NextPlot = 'replacechildren';
 
 if isfield(data, 'rmse')
    h.textResRmse.String = ['rmse = ', sprintf('%1.3e', data.rmse)];
-   h.textResRmse.Enable = 'on';
    if  data.rmse <= str2num(h.autoEditRmse.String) %#ok<*ST2NM>
       % OK
       h.textResRmse.BackgroundColor = [0.57, 1, 0.6];
@@ -47,8 +58,5 @@ if isfield(data, 'rmse')
       % not OK
       h.textResRmse.BackgroundColor = [1, 0.75, 0.7];
    end
-   h.textResRmse.Enable = 'off';
 end
-
 end
-

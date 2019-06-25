@@ -49,6 +49,4 @@ function [peaks, ind] = findPeaksType(curve, type)
    end
    peaks = innerCurve(isPeak);
    ind = temp1(isPeak);
-
 end
-

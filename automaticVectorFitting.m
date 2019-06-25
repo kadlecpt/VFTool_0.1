@@ -1,5 +1,37 @@
 function [model, funVF, rmse] = automaticVectorFitting(s, fun, settings)
-
+%% automaticVectorFitting searches for the VF model automatically
+% This function searches for the VF model based on complex frequency, 
+% complex function samples and specified settings.
+%
+%  INPUTS
+%   s: complex frequency, double [1 x nS]
+%   fun: function samples, double [1 x nS]
+%   settings: struct [1 x 1]
+%      .rmse: wanted rmse value, double [1 x 1]
+%      .maxTrials: max VF runs, double [1 x 1]
+%      .isPeaks: are peaks in the function, logical [1 x 1]
+%      .poleDistribution: ioit pole distribution ('lin'/'log'), char [1 x 3]
+%      .nIters: number of iterations per VF run, double [1 x 1]
+%      .choiceType: take 'first' with good rmse  or 'best' from all, d. [1 x 1]
+% 
+%  OUTPUTS
+%   model: VF model, struct
+%        .poles: complex poles, double [nP x 1]
+%        .residues: complex rsidues, double [nP x 1]
+%        .d: VF coeff., double [1 x 1]
+%        .d: VF coeff., double [1 x 1]
+%   funVF: VF function approsimation, double [1 x nS]
+%   rmse: root mean square error value, double [1 x 1]
+%
+%  SYNTAX
+%
+%  [model, funVF, rmse] = automaticVectorFitting(s, fun, settings)
+%
+% Function automaticVectorFitting searches for the VF model in automatic regime. 
+% It saves either the 'first' model satisfying the rmse criterion, or the model 
+% with the OK rmse value and minimal nuber of poles ('best').
+%
+% © 2019, Petr Kadlec, BUT, kadlecp@feec.vutbr.cz
 
 nSamples = size(s, 2);
 
@@ -52,7 +84,7 @@ if strcmp(settings.choiceType, 'best')
    for iIter = 1:settings.maxTrials
       curN = cikCak2(iIter);
       try
-         allModels(iIter) = runVectorFitting(s, fun, curN, ...
+         allModels(iIter) = vectorFitting(s, fun, curN, ...
             settings.nIters, settings.isPeaks, settings.poleDistribution);
          if ~isempty(allModels(iIter).poles)
             allFunVF(iIter, :) = reconstructFun(s, allModels(iIter));
@@ -81,7 +113,7 @@ elseif strcmp(settings.choiceType, 'first')
    while curRmse > settings.rmse && iIter <= settings.maxTrials
       curN = cikCak2(iIter);
       try
-         allModels(iIter) = runVectorFitting(s, fun, curN, ...
+         allModels(iIter) = vectorFitting(s, fun, curN, ...
             settings.nIters, settings.isPeaks, settings.poleDistribution);
          if ~isempty(allModels(iIter).poles)
             allFunVF(iIter, :) = reconstructFun(s, allModels(iIter));
@@ -100,7 +132,7 @@ end
 %% try to make the best result better by adding 
 if rmseMin > settings.rmse
    try 
-      bestModel = runVectorFitting(s, fun, cikCak2(ind), ...
+      bestModel = vectorFitting(s, fun, cikCak2(ind), ...
          settings.nIters + 1, settings.isPeaks, settings.poleDistribution);
       if ~isempty(bestModel.poles)
          bestFunVF = reconstructFun(s, bestModel);
@@ -120,6 +152,4 @@ end
 model = allModels(ind);
 funVF = allFunVF(ind, :);
 rmse = allRmse(ind);
-
-
 end

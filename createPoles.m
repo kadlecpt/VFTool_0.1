@@ -53,6 +53,4 @@ else
       realPoles = -2*pi*logspace(freqLim(1), freqLim(2), order);
    end
 end
-
-
 end

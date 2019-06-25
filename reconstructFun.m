@@ -30,4 +30,3 @@ for iP = 1:size(model.poles, 1)
 end
 funVF = funVF + model.d + s.*model.e;
 end
-

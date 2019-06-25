@@ -1,13 +1,37 @@
-function model = runVectorFitting(s, fVals, order, nIters, isPeaks, ...
+function model = vectorFitting(s, fVals, order, nIters, isPeaks, ...
    poleDistribution)
+%% vectorFitting searches for the VF model
+% This function searches for the VF model based on complex frequency, 
+% complex function samples and fully specified settings.
+%
+%  INPUTS
+%   s: complex frequency, double [1 x nS]
+%   fun: function samples, double [1 x nS]
+%   order: approximation order (number of poles), double [1 x 1]
+%   nIters: number of iterations per VF run, double [1 x 1]
+%   isPeaks: are peaks in the function, logical [1 x 1]
+%   poleDistribution: ioit pole distribution ('lin'/'log'), char [1 x 3]
+% 
+%  OUTPUTS
+%   model: VF model, struct
+%        .poles: complex poles, double [nP x 1]
+%        .residues: complex rsidues, double [nP x 1]
+%        .d: VF coeff., double [1 x 1]
+%        .d: VF coeff., double [1 x 1]
+%
+%  SYNTAX
+%
+%  model = vectorFitting(s, fun, order, nIters, isPeaks, poleDistribution)
+%
+% Function vectorFitting searches for the VF model. 
+%
+% © 2019, Petr Kadlec, BUT, kadlecp@feec.vutbr.cz
 
 model.poles = [];
 model.residues = [];
 model.d = [];
 model.e = [];
 if nargin < 6
-   % check if curve in fVals is peaky
-   % todo: meybe gradient-based selection
    poleDistribution = 'logarithmic';
    if nargin < 5
       isPeaks = true;
@@ -28,7 +52,6 @@ nF = size(fVals, 1);
 if nF == 1
    fVals = fVals.';
 end
-
 
 %% poles
 % get initial poles
@@ -170,6 +193,4 @@ for iIter = 1:nIters
       model.e = x(order + 2);
    end
 end
-
 end
-
