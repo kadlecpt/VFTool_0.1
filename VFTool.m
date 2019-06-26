@@ -1,9 +1,11 @@
-clear all
-close all
-clc
 %% VFTool 0.1
 % this is a GUI interface for the Vector Fitting tool that can find a 
 % model representing a specified complex function in the frequency-domain.
+% The VF model is defined: $f(s) = \sum_{n=1}^{N}\frac{r_n}{s-p_n} + d + se$
+% where $s$ stands for complex frequency ($s = 2\pif$), $N$ is order of the
+% approximation i.e. number of residues $r_n$ and poles $p_n$. Szmbols $d$ and 
+% $e$ are amplitude coefficients. 
+
 fig = figure('Position', [200 100 1600 900], 'Name', 'VFTool v0.1', ...
    'NumberTitle', 'off');
 textBackColor = [0.7 0.7 0.7];
@@ -448,8 +450,8 @@ h.axes = axes(fig, 'Units', 'normalized', ...
    'Position', [0.45 0.3 0.5 0.45], 'FontSize', 16, ...
    'NextPlot', 'replacechildren');
 grid on
-xlabel(h.axes, '$f$ [Hz]', 'Interpreter', 'latex')
-ylabel(h.axes, '$fun$ [-]', 'Interpreter', 'latex')
+xlabel(h.axes, 'frequency [Hz]', 'Interpreter', 'latex')
+ylabel(h.axes, '$f$ [-]', 'Interpreter', 'latex')
 
 
 %% results display
